@@ -48,15 +48,5 @@ faqItems.forEach((item) => {
   });
 });
 
-// Contact form success message
-const contactForm = document.getElementById("contact-form");
-const successMsg = document.getElementById("form-success");
-if (contactForm) {
-  contactForm.addEventListener("submit", (e) => {
-    // Netlify handles submission; show success after a short delay
-    setTimeout(() => {
-      contactForm.classList.add("hidden");
-      successMsg.classList.remove("hidden");
-    }, 300);
-  });
-}
+// Form submission is handled natively by Netlify
+// which redirects to /success on completion
