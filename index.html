@@ -432,13 +432,9 @@
               id="contact-form"
               name="contact"
               method="POST"
-              action="success.html"
-              data-netlify="true"
-              netlify-honeypot="bot-field"
+              action="/.netlify/functions/contact"
               class="space-y-5"
             >
-              <input type="hidden" name="form-name" value="contact" />
-              <p class="hidden"><label>Don't fill this out: <input name="bot-field" /></label></p>
 
               <div>
                 <label for="full-name" class="block text-sm font-semibold text-ice mb-1">Full Name <span class="text-blue">*</span></label>
