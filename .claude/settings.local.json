@@ -6,7 +6,10 @@
       "Read(//usr/local/**)",
       "Read(//c/Users/markw/.nvm/versions/**)",
       "Bash(ls \"C:/Users/markw/Downloads/\" | grep -i \"mountain\\\\|snowboard\\\\|rider\\\\|slope\\\\|alpine\\\\|snow\" 2>/dev/null || echo \"not found\")",
-      "Bash(cp \"C:/Users/markw/Downloads/mountains-snowboard.webp\" \"C:/Users/markw/OneDrive/Desktop/Claude/bsrsnowlab/assets/images/\" && echo \"Done\")"
+      "Bash(cp \"C:/Users/markw/Downloads/mountains-snowboard.webp\" \"C:/Users/markw/OneDrive/Desktop/Claude/bsrsnowlab/assets/images/\" && echo \"Done\")",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
     ]
   }
 }
