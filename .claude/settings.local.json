@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/markw/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/a9345b42-357b-41fb-84b2-3b03ceba7da7/9cb5ffa4-3453-4f81-b54e-ea4d0ad31197/skills/docx/**)",
+      "Bash(extract-text \"C:\\\\Users\\\\markw\\\\Downloads\\\\BSR_SnowLab_Build_Brief.docx\")",
+      "Read(//usr/local/**)",
+      "Read(//c/Users/markw/.nvm/versions/**)",
+      "Bash(ls \"C:/Users/markw/Downloads/\" | grep -i \"mountain\\\\|snowboard\\\\|rider\\\\|slope\\\\|alpine\\\\|snow\" 2>/dev/null || echo \"not found\")",
+      "Bash(cp \"C:/Users/markw/Downloads/mountains-snowboard.webp\" \"C:/Users/markw/OneDrive/Desktop/Claude/bsrsnowlab/assets/images/\" && echo \"Done\")"
+    ]
+  }
+}
