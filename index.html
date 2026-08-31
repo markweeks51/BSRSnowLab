@@ -431,6 +431,13 @@
               class="space-y-5"
             >
 
+              <!-- Honeypot — hidden from real users, bots that auto-fill every field get caught -->
+              <div class="absolute -left-[9999px]" aria-hidden="true">
+                <label for="company">Company</label>
+                <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+              </div>
+              <input type="hidden" id="form-loaded-at" name="form-loaded-at" value="" />
+
               <div>
                 <label for="full-name" class="block text-sm font-semibold text-ice mb-1">Full Name <span class="text-blue">*</span></label>
                 <input

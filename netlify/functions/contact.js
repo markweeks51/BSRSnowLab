@@ -1,3 +1,14 @@
+const MIN_FILL_TIME_MS = 3000;
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 exports.handler = async function (event) {
   // Only allow POST
   if (event.httpMethod !== "POST") {
@@ -7,11 +18,24 @@ exports.handler = async function (event) {
   try {
     // Parse form data
     const params = new URLSearchParams(event.body);
-    const name    = params.get("full-name") || "";
-    const email   = params.get("email") || "";
-    const phone   = params.get("phone") || "Not provided";
-    const service = params.get("service") || "";
-    const message = params.get("message") || "";
+    const name       = params.get("full-name") || "";
+    const email      = params.get("email") || "";
+    const phone      = params.get("phone") || "Not provided";
+    const service    = params.get("service") || "";
+    const message    = params.get("message") || "";
+    const honeypot   = params.get("company") || "";
+    const loadedAt   = Number(params.get("form-loaded-at"));
+
+    // Bot detection: honeypot filled in, or form submitted implausibly fast.
+    // Redirect as if successful so bots don't learn they were caught.
+    const submittedTooFast = !loadedAt || (Date.now() - loadedAt) < MIN_FILL_TIME_MS;
+    if (honeypot.trim() !== "" || submittedTooFast) {
+      return {
+        statusCode: 302,
+        headers: { Location: "/success.html" },
+        body: "",
+      };
+    }
 
     // Send via Resend
     const response = await fetch("https://api.resend.com/emails", {
@@ -29,11 +53,11 @@ exports.handler = async function (event) {
           <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0A1628;color:#F0F4F8;padding:2rem;border-radius:8px;">
             <h2 style="color:#0EA5E9;margin-top:0;">New Enquiry from BSR Snow Lab Website</h2>
             <table style="width:100%;border-collapse:collapse;">
-              <tr><td style="padding:8px 0;color:#94A3B8;width:140px;">Name</td><td style="padding:8px 0;color:#F0F4F8;">${name}</td></tr>
-              <tr><td style="padding:8px 0;color:#94A3B8;">Email</td><td style="padding:8px 0;color:#F0F4F8;"><a href="mailto:${email}" style="color:#0EA5E9;">${email}</a></td></tr>
-              <tr><td style="padding:8px 0;color:#94A3B8;">Phone</td><td style="padding:8px 0;color:#F0F4F8;">${phone}</td></tr>
-              <tr><td style="padding:8px 0;color:#94A3B8;">Service</td><td style="padding:8px 0;color:#F0F4F8;">${service}</td></tr>
-              <tr><td style="padding:8px 0;color:#94A3B8;vertical-align:top;">Message</td><td style="padding:8px 0;color:#F0F4F8;">${message}</td></tr>
+              <tr><td style="padding:8px 0;color:#94A3B8;width:140px;">Name</td><td style="padding:8px 0;color:#F0F4F8;">${escapeHtml(name)}</td></tr>
+              <tr><td style="padding:8px 0;color:#94A3B8;">Email</td><td style="padding:8px 0;color:#F0F4F8;"><a href="mailto:${escapeHtml(email)}" style="color:#0EA5E9;">${escapeHtml(email)}</a></td></tr>
+              <tr><td style="padding:8px 0;color:#94A3B8;">Phone</td><td style="padding:8px 0;color:#F0F4F8;">${escapeHtml(phone)}</td></tr>
+              <tr><td style="padding:8px 0;color:#94A3B8;">Service</td><td style="padding:8px 0;color:#F0F4F8;">${escapeHtml(service)}</td></tr>
+              <tr><td style="padding:8px 0;color:#94A3B8;vertical-align:top;">Message</td><td style="padding:8px 0;color:#F0F4F8;">${escapeHtml(message)}</td></tr>
             </table>
             <hr style="border-color:#1E3A5F;margin:1.5rem 0;" />
             <p style="color:#94A3B8;font-size:0.85rem;margin:0;">Sent from the contact form at bsrsnowlab.com</p>

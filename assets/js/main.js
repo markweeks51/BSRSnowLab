@@ -50,3 +50,7 @@ faqItems.forEach((item) => {
 
 // Form submission is handled natively by Netlify
 // which redirects to /success on completion
+
+// Stamp load time for the contact form's bot time-trap
+const formLoadedAt = document.getElementById("form-loaded-at");
+if (formLoadedAt) formLoadedAt.value = Date.now();
