@@ -9,6 +9,23 @@ function escapeHtml(str) {
     .replace(/'/g, "&#39;");
 }
 
+async function verifyTurnstile(token, secret, event) {
+  const body = new URLSearchParams({ secret, response: token });
+  const ip = event.headers["x-nf-client-connection-ip"];
+  if (ip) body.set("remoteip", ip);
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body,
+    });
+    const data = await res.json();
+    return data.success === true;
+  } catch (err) {
+    console.error("Turnstile verify error:", err);
+    return false;
+  }
+}
+
 exports.handler = async function (event) {
   // Only allow POST
   if (event.httpMethod !== "POST") {
@@ -34,6 +51,23 @@ exports.handler = async function (event) {
         statusCode: 302,
         headers: { Location: "/success.html" },
         body: "",
+      };
+    }
+
+    // Cloudflare Turnstile: the widget adds a one-time token to the form;
+    // verify it server-side before sending anything.
+    const turnstileToken = params.get("cf-turnstile-response") || "";
+    const secret = process.env.TURNSTILE_SECRET_KEY;
+    if (!secret) {
+      console.error("TURNSTILE_SECRET_KEY is not set");
+      return { statusCode: 500, body: "Server misconfigured" };
+    }
+    const verified = turnstileToken && (await verifyTurnstile(turnstileToken, secret, event));
+    if (!verified) {
+      return {
+        statusCode: 400,
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+        body: "<p>Verification failed. Please go back, wait for the check to complete, and try again.</p>",
       };
     }
 

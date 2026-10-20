@@ -27,6 +27,9 @@
   <!-- Tailwind compiled CSS -->
   <link rel="stylesheet" href="assets/css/output.css" />
 
+  <!-- Cloudflare Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XCZDJGBKRD"></script>
   <script>
@@ -490,6 +493,9 @@
                   placeholder="Tell us about your equipment and what you need…"
                 ></textarea>
               </div>
+
+              <!-- Cloudflare Turnstile bot check (adds the cf-turnstile-response field on submit) -->
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAAFcj9zujARHsZUF2" data-theme="dark"></div>
 
               <button type="submit" class="btn-primary w-full text-base py-4">Send Enquiry</button>
             </form>
